@@ -1,16 +1,23 @@
 {
   "name": "hardyhat",
   "module": "index.ts",
-  "type": "module",
   "private": true,
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
     "@openzeppelin/contracts": "^5.2.0",
     "@types/bun": "latest",
-    "ethers": "^6.13.5",
+    "@types/chai": "^4.3.11",
+    "chai": "^4.3.10",
+    "dotenv": "^16.4.5",
+    "ethereum-waffle": "^4.0.10",
+    "ethers": "^5.7.2",
     "hardhat": "^2.22.19"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "scripts": {
+    "env-test": "bun scripts/env-test.js"
   }
 }

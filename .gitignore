@@ -9,6 +9,7 @@ dist
 # code coverage
 coverage
 *.lcov
+coverage.json
 
 # logs
 logs
@@ -32,3 +33,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Hardhat files
+cache
+artifacts
+
+typechain
+typechain-types
