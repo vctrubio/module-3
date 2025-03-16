@@ -1,15 +1,8 @@
-# hardyhat
+# Backend Backbone
+[] hardhat set up to compile, deploy and test contracts
+[] bun runnig to serve the front end
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.5. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- contracts
+-- contains smart contracts for interaction
+- lib
+-- my web3 libarray, modules what can be shipped anywhere
