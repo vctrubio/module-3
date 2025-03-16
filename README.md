@@ -1,5 +1,5 @@
 # Backend Backbone
-[] hardhat set up to compile, deploy and test contracts
+[] hardhat set up to compile, deploy and test contracts  
 [] bun runnig to serve the front end
 
 - contracts
