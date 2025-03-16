@@ -3,7 +3,6 @@
 # Default target
 help:
 	@echo "Available commands:"
-	@echo "  make env             - Print environment variables loaded by Bun"
 	@echo "  make test            - Run Hardhat tests using Bun"
 	@echo "  make compile         - Compile smart contracts"
 	@echo "  make deploy          - Deploy smart contracts to network"
@@ -13,11 +12,6 @@ help:
 	@echo "  make accounts        - List accounts from local node"
 	@echo "  make create-wallet   - Create a new Ethereum wallet"
 	@echo "  make check-network   - Check current network configuration"
-
-# Print environment variables loaded by Bun
-env:
-	@echo "\033[1;34mEnvironment variables loaded by Bun:\033[0m"
-	@bun run scripts/env-test.js
 
 # Run tests
 test:
