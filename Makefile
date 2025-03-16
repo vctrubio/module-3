@@ -5,7 +5,7 @@ help:
 	@echo "Available commands:"
 	@echo "  make test            - Run Hardhat tests using Bun"
 	@echo "  make compile         - Compile smart contracts"
-	@echo "  make deploy          - Deploy smart contracts to network"
+	@echo "  make deploy [network=localhost] - Deploy smart contracts to network (default: localhost)"
 	@echo "  make clean           - Remove artifacts and cache"
 	@echo "  make print-env       - Print all process.env variables"
 	@echo "  make node            - Run local Hardhat node"
@@ -24,8 +24,10 @@ compile:
 	@bunx hardhat compile
 
 # Deploy contracts
+# Default network is localhost if not specified
+network ?= localhost
 deploy:
-	@echo "\033[1;32mDeploying contracts...\033[0m"
+	@echo "\033[1;32mDeploying contracts to network: $(network)...\033[0m"
 	@bunx hardhat run scripts/deploy.js --network $(network)
 
 # Clean artifacts and cache
