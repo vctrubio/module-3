@@ -30,7 +30,10 @@ async function main() {
     await contractInstance.waitForDeployment();
     
     const address = await contractInstance.getAddress();
-    const abi = contractFactory.interface.format('json');
+    // Get the full ABI structure instead of using format('json')
+    const artifact = await hh.artifacts.readArtifact(deployee.contractName);
+    const abi = artifact.abi;
+    
     return {
       network: {
         name: deployee.network.name,
