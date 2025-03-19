@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { getEthers } from './wallet';
-import EthersComponent from './components/EthersInteraction';
+import MyAbi from './components/MyAbi';
 
 const WalletShow = ({ walletInstance }) => {
     const [jsonError, setJsonError] = useState(false);
@@ -40,7 +40,23 @@ const WalletShow = ({ walletInstance }) => {
     );
 };
 
-const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isConnecting }) => {
+const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isConnecting, contractInstance, setContractInstance }) => {
+    const [networkMismatch, setNetworkMismatch] = useState(false);
+
+    useEffect(() => {
+        if (walletInstance && contractInstance) {
+            // Check if wallet network matches contract network
+            const walletChainId = walletInstance.network?.chainId;
+            const contractChainId = contractInstance.network?.chainId;
+
+            if (walletChainId && contractChainId && walletChainId !== contractChainId) {
+                setNetworkMismatch(true);
+            } else {
+                setNetworkMismatch(false);
+            }
+        }
+    }, [walletInstance, contractInstance]);
+
     if (walletInstance && walletInstance.connected) {
         return (
             <div className="flex flex-col items-center w-full">
@@ -52,7 +68,25 @@ const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isC
                         Sign Out
                     </button>
                 </div>
-                <WalletShow walletInstance={walletInstance} />
+
+                {networkMismatch && contractInstance && (
+                    <div className="w-full max-w-2xl mb-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
+                        <p className="font-bold">Network Mismatch Warning</p>
+                        <p>Your wallet is connected to network with chainId: {walletInstance.network?.chainId}</p>
+                        <p>Contract is deployed on network with chainId: {contractInstance.network?.chainId}</p>
+                        <p>Please switch your network to interact with this contract.</p>
+                    </div>
+                )}
+
+                <div className='flex gap-4'>
+
+                    <MyAbi
+                        contractInstance={contractInstance}
+                        setContractInstance={setContractInstance}
+                    />
+
+                    <WalletShow walletInstance={walletInstance} />
+                </div>
             </div>
         );
     }
@@ -81,6 +115,7 @@ const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isC
 function App() {
     const [walletInstance, setWalletInstance] = useState(null);
     const [isConnecting, setIsConnecting] = useState(false);
+    const [contractInstance, setContractInstance] = useState(null);
 
     const connectWallet = async () => {
         try {
@@ -112,8 +147,9 @@ function App() {
                 connectWallet={connectWallet}
                 disconnectWallet={disconnectWallet}
                 isConnecting={isConnecting}
+                contractInstance={contractInstance}
+                setContractInstance={setContractInstance}
             />
-            {/* <EthersComponent walletInstance={walletInstance} /> */}
         </div>
     );
 }
