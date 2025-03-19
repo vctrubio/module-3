@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "compile": "bunx hardhat compile"
+    "compile": "bunx hardhat compile",
+    "deploy": "bunx hardhat run scripts/deploy.js"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^5.2.0",
