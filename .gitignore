@@ -1,5 +1,8 @@
 # dependencies (bun install)
 node_modules
+# hardhat
+hardhat/artifacts
+hardhat/cache
 
 # output
 out
