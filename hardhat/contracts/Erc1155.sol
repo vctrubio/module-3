@@ -13,6 +13,9 @@ contract HouseUrban is ERC1155 {
     uint256 public constant MIDDLE = 1;
     uint256 public constant BACK = 2;
 
+    uint public constant NEW = 55;
+    uint private constant NOTNEW = 54;
+
     constructor() ERC1155(uri) {
         _mint(msg.sender, FRONT, 10 ** 18, "");
         _mint(msg.sender, MIDDLE, 10 ** 27, "");

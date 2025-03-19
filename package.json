@@ -1,21 +1,25 @@
 {
-  "name": "module-3",
-  "module": "index.ts",
+  "name": "again",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "type": "module",
-  "private": true,
   "scripts": {
-    "compile": "bunx hardhat compile",
-    "deploy": "bunx hardhat run hardhat/scripts/deploy.js"
+    "deploy": "pnpm hardhat run hardhat/scripts/deploy.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.6.0",
   "devDependencies": {
-    "@openzeppelin/contracts": "^5.2.0",
-    "@types/bun": "latest",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "hardhat": "^2.22.19"
   },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
   "dependencies": {
-    "ethers": "^6.13.5"
+    "ethers": "^6.13.5",
+    "module-alias": "^2.2.2"
+  },
+  "_moduleAliases": {
+    "#": "."
   }
 }

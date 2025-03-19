@@ -1,42 +1,62 @@
-import hre from 'hardhat';
+import hh from "hardhat";
+import { deployee } from "../../src/config.deploy.js";
+import fs from 'fs';
+import { ethers } from "ethers"; // Import ethers
+import { sign } from "crypto";
 
-async function main() {
-  // Debug logs to see what's available
-  console.log("Hardhat Runtime Environment (hre) keys:", Object.keys(hre));
-  console.log("Is ethers available?", !!hre.ethers);
-  // if (hre.ethers) {
-  //   console.log("Ethers keys:", Object.keys(hre.ethers));
-  // }
-  
-  // // Ensure Hardhat is initialized
-  // await hre.run('compile');
-
-  // // Check if the contract artifact exists
-  // const artifacts = await hre.artifacts.readArtifact("HouseUrban");
-  // console.log("Contract Artifact:", artifacts);
-
-  // // Log the network we're deploying to
-  // console.log(`🚀 Deploying to network: ${hre.network.name}`);
-
-  // // Get the contract factory using hre directly
-  // const HouseUrban = await hre.ethers.getContractFactory("HouseUrban");
-
-  // // Deploy the contract
-  // const houseUrban = await HouseUrban.deploy();
-
-  // // Wait for the contract to be mined
-  // console.log("Deploying contract...");
-  // await houseUrban.waitForDeployment();
-
-  // Output the contract address
-  // console.log(`Contract deployed to: ${await houseUrban.getAddress()}`);
+async function writeResultToFile(result) {
+  const outputFile = `./src/config.${deployee.contractName}.json`;
+  fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
 }
 
-// Execute deployment
+function verify() {
+  if (!deployee) {
+    throw new Error('deployee is not defined in ./src/config.deploy.js');
+  }
+  if (!deployee.network) {
+    throw new Error('deployee.network is not defined');
+  }
+  if (!deployee.contractName) {
+    throw new Error('deployee.contractName is not defined');
+  }
+}
+
+async function main() {
+  try {
+    verify();
+
+    const [signer] = await hh.ethers.getSigners(); // Get the signer
+    const contractFactory = await hh.ethers.getContractFactory(deployee.contractName, signer); // Use the signer
+    const contractInstance = await contractFactory.deploy();
+    await contractInstance.waitForDeployment();
+    
+    const address = await contractInstance.getAddress();
+    const abi = contractFactory.interface.format('json');
+    return {
+      network: {
+        name: deployee.network.name,
+        chainId: deployee.network.chainId,
+        url: deployee.network.url,
+        address: address,
+      },
+      contract: {
+        name: deployee.contractName,
+        owner: signer.address,
+        abi: abi,
+        // bytecode: contractFactory.bytecode, // Uncomment if needed
+      }
+    };
+  } catch (error) {
+    console.error('Error in deployment script:', error.message);
+    process.exit(1);
+  }
+}
+
 main()
-  .then(() => process.exit(0))
+  .then((result) => {
+    writeResultToFile(result);
+    process.exit(0);
+  })
   .catch((error) => {
-    console.error("Deployment failed with error:");
-    console.error(error);
     process.exit(1);
   });
