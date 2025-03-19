@@ -1,15 +1,10 @@
-# module-3
+# README
 
-To install dependencies:
+This is dive at contract development and automation
 
-```bash
-bun install
-```
+## Structure
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.5. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- config.json will hold configurtion and expected params (object) for contract interaction
+- hardhat to compile, deploy contract
+- listener.js will parse the information from hardhat contract
+- app, a minimalist user interface for user interaction with contract
