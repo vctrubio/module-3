@@ -1,7 +1,7 @@
 {
-  "name": "again",
+  "name": "metanas-module-3",
   "version": "1.0.0",
-  "description": "",
+  "description": "An exersive and dive into hardhat deployment, with front end interaction",
   "main": "index.js",
   "type": "module",
   "scripts": {

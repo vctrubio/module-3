@@ -1,8 +1,7 @@
 import hh from "hardhat";
 import { deployee } from "../../src/config.deploy.js";
 import fs from 'fs';
-import { ethers } from "ethers"; // Import ethers
-import { sign } from "crypto";
+import { COLORS } from "../../lib/macros.js";
 
 async function writeResultToFile(result) {
   const outputFile = `./src/config.${deployee.contractName}.json`;
@@ -55,6 +54,7 @@ async function main() {
 main()
   .then((result) => {
     writeResultToFile(result);
+    console.log(`Contract deployed with address: ${COLORS.GREEN}${result.network.address}${COLORS.RESET}`);
     process.exit(0);
   })
   .catch((error) => {
