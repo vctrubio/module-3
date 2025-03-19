@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "compile": "bunx hardhat compile",
-    "deploy": "bunx hardhat run scripts/deploy.js"
+    "deploy": "bunx hardhat run hardhat/scripts/deploy.js"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^5.2.0",
@@ -14,5 +14,8 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "ethers": "^6.13.5"
   }
 }
