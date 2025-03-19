@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { getEthers } from './wallet';
 import MyAbi from './components/MyAbi';
+import { Client } from './client';
 
 const WalletShow = ({ walletInstance }) => {
     const [jsonError, setJsonError] = useState(false);
