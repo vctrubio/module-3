@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "compile": "bunx hardhat compile"
+  },
   "devDependencies": {
     "@openzeppelin/contracts": "^5.2.0",
     "@types/bun": "latest",
