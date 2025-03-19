@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-// Contract Selection component
+const contractFiles = ['HouseUrban', 'SimpleStorage']; // CONFIG FOR FILE READING
+
 const ContractSelector = ({ configFiles, selectedConfig, onSelect }) => (
   <div className="mb-6">
     <h3 className="text-lg font-semibold mb-2">Available Contracts:</h3>
@@ -22,7 +23,6 @@ const ContractSelector = ({ configFiles, selectedConfig, onSelect }) => (
   </div>
 );
 
-// Network Information component
 const NetworkInfo = ({ network }) => (
   <div>
     <h4 className="font-medium text-lg mb-2">Network</h4>
@@ -34,7 +34,6 @@ const NetworkInfo = ({ network }) => (
   </div>
 );
 
-// Contract Information component
 const ContractInfo = ({ contract }) => (
   <div>
     <h4 className="font-medium text-lg mb-2">Contract</h4>
@@ -45,7 +44,6 @@ const ContractInfo = ({ contract }) => (
   </div>
 );
 
-// ABI Functions component
 const AbiFunctions = ({ abi }) => {
   const functions = abi?.filter(item => item.type === "function") || [];
   
@@ -65,7 +63,6 @@ const AbiFunctions = ({ abi }) => {
   );
 };
 
-// Contract Data Display component
 const ContractDisplay = ({ contractData }) => {
   return (
     <div className="bg-gray-100 p-4 rounded-lg">
@@ -83,7 +80,6 @@ const ContractDisplay = ({ contractData }) => {
   );
 };
 
-// Main component
 const MyAbi = ({ contractInstance, setContractInstance }) => {
   const [configFiles, setConfigFiles] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState(null);
@@ -104,10 +100,8 @@ const MyAbi = ({ contractInstance, setContractInstance }) => {
   useEffect(() => {
     const fetchConfigFiles = async () => {
       try {
-        // In a real app, you'd need a server endpoint to list files
-        // This is a simulated approach for demonstration
-        const files = ['HouseUrban']; // Add more config file names as they become available
-        setConfigFiles(files);
+
+        setConfigFiles(contractFiles);
       } catch (err) {
         setError('Failed to fetch config files');
         console.error(err);

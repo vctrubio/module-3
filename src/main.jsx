@@ -25,14 +25,14 @@ const WalletShow = ({ walletInstance }) => {
     }
 
     return (
-        <div className="mt-8 w-full max-w-2xl">
+        <div className="w-full max-w-2xl">
             <h2 className="text-xl font-bold mb-4">Wallet Details</h2>
             {jsonError ? (
                 <div className="bg-red-100 text-red-700 p-4 rounded-lg">
                     Error displaying wallet data
                 </div>
             ) : (
-                <pre className="bg-gray-800 text-green-400 p-4 rounded-lg overflow-auto max-h-96">
+                <pre className="bg-gray-800 text-green-400 p-4 rounded-lg overflow-auto h-full">
                     {jsonDisplay}
                 </pre>
             )}
@@ -79,7 +79,6 @@ const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isC
                 )}
 
                 <div className='flex gap-4'>
-
                     <MyAbi
                         contractInstance={contractInstance}
                         setContractInstance={setContractInstance}
