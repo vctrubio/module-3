@@ -1,6 +1,6 @@
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.28",
+  solidity: "0.8.20", // Match the Solidity version used in the contract
   paths: {
     sources: "./hardhat/contracts", // Store Solidity contracts here
     artifacts: "./hardhat/artifacts", // Compiled contract artifacts
@@ -8,4 +8,5 @@ module.exports = {
     deploy: "./hardhat/deploy", // Deployment scripts
     tests: "./hardhat/test", // Store tests inside the hardhat folder
   },
+  defaultNetwork: "hardhat",
 };
