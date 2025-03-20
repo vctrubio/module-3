@@ -4,8 +4,16 @@ import fs from 'fs';
 import { COLORS } from "../../lib/macros.js";
 
 async function writeResultToFile(result) {
-  const outputFile = `./src/config.${deployee.contractName}.json`;
+  const outputDir = './config'; //it is relative to where the pnpm is executed
+  const outputFile = `${outputDir}/config.${deployee.contractName}.json`;
+
+  if (!fs.existsSync(outputDir)) {
+    console.error(`Directory ${outputDir} does not exist`);
+    throw new Error(`Directory ${outputDir} does not exist`);
+  }
+
   fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+  console.log('Writing to file complete:', outputFile);
 }
 
 function verify() {
@@ -57,7 +65,7 @@ async function main() {
 main()
   .then((result) => {
     writeResultToFile(result);
-    console.log(`Contract deployed with address: ${COLORS.GREEN}${result.network.address}${COLORS.RESET}`);
+    console.log(`Contract deployed with address: ${COLORS.GREEN}${result.contract.address}${COLORS.RESET}`);
     process.exit(0);
   })
   .catch((error) => {
