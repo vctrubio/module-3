@@ -47,7 +47,8 @@ function App() {
             </h1>
 
             <div className="flex justify-center gap-8">
-                {wallet ? (
+                
+                {/* {wallet ? (
                     <div className="flex flex-col lg:flex-row gap-6 items-start justify-center border">
                         <div className="w-full">
                             <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Wallet</h2>
@@ -63,13 +64,14 @@ function App() {
                             <div className="text-xl">Loading...</div>
                         )}
                     </div>
-                )}
+                )} */}
 
                 <div className="border">
                     <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Contract</h2>
                     <UIContract contract={contract} setContract={setContract} />
                 </div>
             </div>
+            
             {wallet && contract && (
                 <div className="mt-8 text-center">
                     <p className="text-xl mb-4">We have contract and wallet. Let's interact!</p>

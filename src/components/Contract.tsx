@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Contract } from '../../lib/types';
 import { AppleNavBar } from './AppleNavBar';
 import { UINetwork } from './Network';
+import { getContractAbiFromConfig } from '../../lib/utils';
 
 const navIcons = [
     {
@@ -29,24 +30,26 @@ const navIcons = [
 
 
 function AddContractBtn({ setContract }: { setContract: (contract: Contract) => void }) {
-    function handleClick() {
-        setContract({
-            instance: null,
-            network: null,
-            apiResponse: null,
-            params: {
-                address: "0x",
-                abi: null,
-                originalOwner: null,
-                name: null
+    const [loading, setLoading] = useState(false);
+
+    async function handleClick() {
+        setLoading(true);
+        try {
+            const contractData = await getContractAbiFromConfig("HouseUrban");
+            if (contractData) {
+                console.log("Contract loaded successfully:", contractData);
             }
-        })
+        } catch (error) {
+            console.error("Error loading contract:", error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
-        <div className='p-2 border rounded-xl'
+        <div className='p-2 border rounded-xl cursor-pointer hover:bg-gray-700'
             onClick={handleClick}>
-            Add Contract
+            {loading ? 'Loading...' : 'Add Contract'}
         </div>
     )
 }

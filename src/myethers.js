@@ -15,21 +15,21 @@ export async function getConnection() {
     }
 
     try {
-        console.log('Initializing BrowserProvider...');
+        // console.log('Initializing BrowserProvider...');
         const provider = new ethers.BrowserProvider(window.ethereum);
-        console.log('Requesting accounts...');
+        // console.log('Requesting accounts...');
         await provider.send("eth_requestAccounts", []);
-        console.log('Getting signer...');
+        // console.log('Getting signer...');
         const signer = await provider.getSigner();
-        console.log('Getting address...');
+        // console.log('Getting address...');
         const address = await signer.getAddress();
-        console.log('Connected address:', address);
+        // console.log('Connected address:', address);
 
-        console.log('Getting network info...');
+        // console.log('Getting network info...');
         const network = await provider.getNetwork();
-        console.log('Detected network:', network);
+        // console.log('Detected network:', network);
 
-        console.log('Getting balance...');
+        // console.log('Getting balance...');
         const balance = await provider.getBalance(address);
 
 

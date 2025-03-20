@@ -2,15 +2,13 @@
 // -- look at dir = config, look at file = x.file.json, return the data as contract
 import { Contract } from '../lib/types';
 import { COLORS, configDir } from "../lib/macros.js";
-import fs from 'fs';
-import path from 'path';
 
-
-export function getContractAbiFromConfig(name: string) {
-    const dir = configDir;
-    const file = path.join(dir, `config.${name}.json`);
-    console.log('file... ', file);
-    const data = fs.readFileSync(file);
-    console.log('data... ', data);
-    // return JSON.parse(data);
+export async function getContractAbiFromConfig(contractName: string){
+    try {
+        console.log('ok contract data format');
+        return 1;
+    } catch (error) {
+        console.error('Error reading contract config:', error);
+        return null;
+    }
 }
