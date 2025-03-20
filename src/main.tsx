@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Wallet } from '../lib/types'
+import { Wallet, Contract } from '../lib/types'
 import { getConnection } from './myethers';
 import { UIWallet } from './components/Wallet';
+import { UIContract } from './components/UIContract';
 
 function App() {
     const [wallet, setWallet] = useState<Wallet | null>(null);
+    const [contract, setContract] = useState<Contract | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const fetchWallet = async () => {
@@ -39,16 +41,35 @@ function App() {
 
     window.w = wallet;
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 p-4 w-full text-white">
-            <h1 className={`text-4xl font-bold mb-8 ${!true && 'animate-bounce'}`}>
+        <div className="min-h-screen bg-gray-800 p-4 w-full text-white border">
+            <h1 className="text-4xl font-bold text-center mb-8">
                 Hello Sir, lets begin
             </h1>
-            {wallet ? <UIWallet wallet={wallet} refreshWallet={fetchWallet} /> : (
-                <div>
-                    {error ? (<div className="text-red-400">Error: {error}</div>) :
-                        (<div>Loading...</div>)}
+
+            <div className="flex justify-center gap-8">
+                {wallet ? (
+                    <div className="flex flex-col lg:flex-row gap-6 items-start justify-center border">
+                        <div className="w-full">
+                            <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Wallet</h2>
+                            <UIWallet wallet={wallet} refreshWallet={fetchWallet} />
+                        </div>
+
+                    </div>
+                ) : (
+                    <div className="flex justify-center">
+                        {error ? (
+                            <div className="text-red-400">Error: {error}</div>
+                        ) : (
+                            <div className="text-xl">Loading...</div>
+                        )}
+                    </div>
+                )}
+
+                <div className="border">
+                    <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Contract</h2>
+                    <UIContract contract={contract} />
                 </div>
-            )}
+            </div>
         </div>
     );
 }

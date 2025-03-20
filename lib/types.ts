@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 export interface BalanceInfo {
     wei: string;         // Raw wei value as string
     formatted: string;   // Formatted in ETH with appropriate decimal places
@@ -17,8 +18,11 @@ export interface Network {
 }
 
 export interface Contract {
-    address: string;
-    abi: any;
-    instance: any;
+    params: {
+        address: string;
+        abi: ethers.ContractInterface | null;
+    }
+    instance: ethers.Contract | null;
+    network: Network;
     apiResponse: Record<string, any>;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NETWORKS, COMMON_NETWORKS, NETWORK_PARAMS } from '../../lib/network';
-import { Network, Wallet } from '../../lib/types';
+import { Network } from '../../lib/types';
 
 export function getNetwork(chainId: string) {
     return NETWORKS[chainId] || { name: 'Unknown Network', currency: 'ETH' };
@@ -33,7 +33,7 @@ export async function setNetwork(chainId: number) {
     }
 }
 
-export function UINetwork({ network, refreshWallet }: { network: Network, refreshWallet: () => void }) {
+export function UINetwork({ network, refreshWallet, disabled }: { network: Network, refreshWallet: () => void, disabled?: boolean  }) {
     const [showNetworkDropdown, setShowNetworkDropdown] = useState(false);
     const networkInfo = getNetwork(network.chainId);
 
@@ -48,11 +48,11 @@ export function UINetwork({ network, refreshWallet }: { network: Network, refres
     return (
         <div className="ml-4 relative">
             <button
-                className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded flex items-center"
+                className="bg-blue-700 hover:bg-gray-800 text-white py-2 px-4 rounded flex items-center"
                 onClick={() => setShowNetworkDropdown(!showNetworkDropdown)}
+                disabled={disabled}
             >
-                <span className="mr-2">Network:</span>
-                <span className="font-bold">{networkInfo.name} ({network.chainId})</span>
+                <span className="font-bold">{networkInfo.name} : {network.chainId}</span>
             </button>
 
             {showNetworkDropdown && (
