@@ -8,6 +8,7 @@ export interface Wallet {
     address: string | null;
     network: Network | null;
     balance: BalanceInfo | null;
+    provider: ethers.Provider;
     apiResponse: Record<string, any> | null;
 }
 

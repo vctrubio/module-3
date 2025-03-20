@@ -32,19 +32,21 @@ export async function getConnection() {
         // console.log('Getting balance...');
         const balance = await provider.getBalance(address);
 
+        // console.log('netwowrk from getConnection is', network.chainId, network.)
 
         return {
             address,
             network: {
                 chainId: network.chainId.toString(),
-                name: network.name,
-                // rpcUrl: rpcUrl //dont know what this does yet
+                name: network.name, //name doesnt exist for hardhat local
+                // rpcUrl: 'abc.todo'//dont know what this does yet
             },
             balance: {
                 wei: balance.toString(),
                 formatted: ethers.formatEther(balance),
                 value: parseFloat(ethers.formatEther(balance))
             },
+            provider,
             apiResponse: {},
             status: 200
         };

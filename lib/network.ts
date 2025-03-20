@@ -68,28 +68,6 @@ export const NETWORK_CONFIG = {
         isTestnet: false,
         isCommon: false
     },
-    10: {
-        id: 10,
-        chainId: '0xa',
-        name: 'Optimism',
-        currency: 'ETH',
-        nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-        rpcUrls: ['https://mainnet.optimism.io'],
-        blockExplorerUrls: ['https://optimistic.etherscan.io'],
-        isTestnet: false,
-        isCommon: false
-    },
-    56: {
-        id: 56,
-        chainId: '0x38',
-        name: 'BNB Smart Chain',
-        currency: 'BNB',
-        nativeCurrency: { name: 'Binance Coin', symbol: 'BNB', decimals: 18 },
-        rpcUrls: ['https://bsc-dataseed.binance.org'],
-        blockExplorerUrls: ['https://bscscan.com'],
-        isTestnet: false,
-        isCommon: false
-    },
     31337: {
         id: 31337,
         chainId: '0x7a69',
@@ -97,17 +75,6 @@ export const NETWORK_CONFIG = {
         currency: 'ETH',
         nativeCurrency: { name: 'Hardhat ETH', symbol: 'ETH', decimals: 18 },
         rpcUrls: ['http://127.0.0.1:8545'],
-        blockExplorerUrls: [],
-        isTestnet: true,
-        isCommon: true
-    },
-    1337: {
-        id: 1337,
-        chainId: '0x539',
-        name: 'Local Network',
-        currency: 'ETH',
-        nativeCurrency: { name: 'Local ETH', symbol: 'ETH', decimals: 18 },
-        rpcUrls: ['http://localhost:8545'],
         blockExplorerUrls: [],
         isTestnet: true,
         isCommon: true
