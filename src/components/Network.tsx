@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { NETWORKS, COMMON_NETWORKS, NETWORK_PARAMS } from '../../lib/network';
+import React, { useState } from 'react';
+import { NETWORK_CONFIG, getCommonNetworks } from '../../lib/network';
 import { Network } from '../../lib/types';
-
-export function getNetwork(chainId: string) {
-    return NETWORKS[chainId] || { name: 'Unknown Network', currency: 'ETH' };
-}
 
 export async function setNetwork(chainId: number) {
     if (!window.ethereum) return false;
@@ -16,11 +12,19 @@ export async function setNetwork(chainId: number) {
         });
         return true;
     } catch (error: any) {
-        if (error.code === 4902 && NETWORK_PARAMS[chainId]) {
+        if (error.code === 4902 && NETWORK_CONFIG[chainId]) {
             try {
+                const networkParams = {
+                    chainId: NETWORK_CONFIG[chainId].chainId,
+                    chainName: NETWORK_CONFIG[chainId].name,
+                    nativeCurrency: NETWORK_CONFIG[chainId].nativeCurrency,
+                    rpcUrls: NETWORK_CONFIG[chainId].rpcUrls,
+                    blockExplorerUrls: NETWORK_CONFIG[chainId].blockExplorerUrls
+                };
+                
                 await window.ethereum.request({
                     method: 'wallet_addEthereumChain',
-                    params: [NETWORK_PARAMS[chainId]],
+                    params: [networkParams],
                 });
                 return true;
             } catch (addError) {
@@ -38,7 +42,8 @@ export function UINetwork({ network, refreshWallet, disabled }: { network: Netwo
     if (!network.chainId) return <>no chainId found</>
 
     const [showNetworkDropdown, setShowNetworkDropdown] = useState(false);
-    const networkInfo = getNetwork(network.chainId);
+    const networkInfo = NETWORK_CONFIG[network.chainId];
+    const commonNetworks = getCommonNetworks();
 
     const handleNetworkChange = async (chainId: number) => {
         setShowNetworkDropdown(false);
@@ -60,7 +65,7 @@ export function UINetwork({ network, refreshWallet, disabled }: { network: Netwo
 
             {showNetworkDropdown && (
                 <div className="absolute mt-1 w-full bg-gray-800 border border-gray-700 rounded shadow-lg z-10">
-                    {COMMON_NETWORKS.map((net) => (
+                    {commonNetworks.map((net) => (
                         <div
                             key={net.id}
                             className="px-4 py-2 hover:bg-gray-700 cursor-pointer"

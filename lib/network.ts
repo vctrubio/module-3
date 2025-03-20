@@ -1,76 +1,122 @@
 /**
- * Known Ethereum networks mapping
+ * Unified network configuration - single source of truth for all network related data
  */
-export const NETWORKS = {
-    1: { name: 'Ethereum Mainnet', currency: 'ETH' },
-    5: { name: 'Goerli Testnet', currency: 'ETH' },
-    11155111: { name: 'Sepolia Testnet', currency: 'ETH' },
-    137: { name: 'Polygon Mainnet', currency: 'MATIC' },
-    80001: { name: 'Mumbai Testnet', currency: 'MATIC' },
-    42161: { name: 'Arbitrum One', currency: 'ETH' },
-    10: { name: 'Optimism', currency: 'ETH' },
-    56: { name: 'BNB Smart Chain', currency: 'BNB' },
-    31337: { name: 'Hardhat Local', currency: 'ETH' },
-    1337: { name: 'Local Network', currency: 'ETH' }
-};
-
-/**
- * Network parameters for adding networks to wallets
- */
-export const NETWORK_PARAMS = {
+export const NETWORK_CONFIG = {
     1: {
+        id: 1,
         chainId: '0x1',
-        chainName: 'Ethereum Mainnet',
+        name: 'Ethereum Mainnet',
+        currency: 'ETH',
         nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
         rpcUrls: ['https://mainnet.infura.io/v3/your-project-id'],
-        blockExplorerUrls: ['https://etherscan.io']
+        blockExplorerUrls: ['https://etherscan.io'],
+        isTestnet: false,
+        isCommon: true
     },
     5: {
+        id: 5,
         chainId: '0x5',
-        chainName: 'Goerli Testnet',
+        name: 'Goerli Testnet',
+        currency: 'ETH',
         nativeCurrency: { name: 'Goerli Ether', symbol: 'ETH', decimals: 18 },
         rpcUrls: ['https://goerli.infura.io/v3/your-project-id'],
-        blockExplorerUrls: ['https://goerli.etherscan.io']
+        blockExplorerUrls: ['https://goerli.etherscan.io'],
+        isTestnet: true,
+        isCommon: true
     },
     11155111: {
+        id: 11155111,
         chainId: '0xaa36a7',
-        chainName: 'Sepolia Testnet',
+        name: 'Sepolia Testnet',
+        currency: 'ETH',
         nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
         rpcUrls: ['https://sepolia.infura.io/v3/your-project-id'],
-        blockExplorerUrls: ['https://sepolia.etherscan.io']
+        blockExplorerUrls: ['https://sepolia.etherscan.io'],
+        isTestnet: true,
+        isCommon: true
     },
     137: {
+        id: 137,
         chainId: '0x89',
-        chainName: 'Polygon Mainnet',
+        name: 'Polygon Mainnet',
+        currency: 'MATIC',
         nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
         rpcUrls: ['https://polygon-rpc.com'],
-        blockExplorerUrls: ['https://polygonscan.com']
+        blockExplorerUrls: ['https://polygonscan.com'],
+        isTestnet: false,
+        isCommon: true
+    },
+    80001: {
+        id: 80001,
+        chainId: '0x13881',
+        name: 'Mumbai Testnet',
+        currency: 'MATIC',
+        nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+        rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
+        blockExplorerUrls: ['https://mumbai.polygonscan.com'],
+        isTestnet: true,
+        isCommon: true
+    },
+    42161: {
+        id: 42161,
+        chainId: '0xa4b1',
+        name: 'Arbitrum One',
+        currency: 'ETH',
+        nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        blockExplorerUrls: ['https://arbiscan.io'],
+        isTestnet: false,
+        isCommon: false
+    },
+    10: {
+        id: 10,
+        chainId: '0xa',
+        name: 'Optimism',
+        currency: 'ETH',
+        nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+        rpcUrls: ['https://mainnet.optimism.io'],
+        blockExplorerUrls: ['https://optimistic.etherscan.io'],
+        isTestnet: false,
+        isCommon: false
+    },
+    56: {
+        id: 56,
+        chainId: '0x38',
+        name: 'BNB Smart Chain',
+        currency: 'BNB',
+        nativeCurrency: { name: 'Binance Coin', symbol: 'BNB', decimals: 18 },
+        rpcUrls: ['https://bsc-dataseed.binance.org'],
+        blockExplorerUrls: ['https://bscscan.com'],
+        isTestnet: false,
+        isCommon: false
     },
     31337: {
+        id: 31337,
         chainId: '0x7a69',
-        chainName: 'Hardhat Local',
+        name: 'Hardhat Local',
+        currency: 'ETH',
         nativeCurrency: { name: 'Hardhat ETH', symbol: 'ETH', decimals: 18 },
         rpcUrls: ['http://127.0.0.1:8545'],
-        blockExplorerUrls: []
+        blockExplorerUrls: [],
+        isTestnet: true,
+        isCommon: true
     },
     1337: {
+        id: 1337,
         chainId: '0x539',
-        chainName: 'Local Network',
+        name: 'Local Network',
+        currency: 'ETH',
         nativeCurrency: { name: 'Local ETH', symbol: 'ETH', decimals: 18 },
         rpcUrls: ['http://localhost:8545'],
-        blockExplorerUrls: []
+        blockExplorerUrls: [],
+        isTestnet: true,
+        isCommon: true
     }
 };
 
 /**
- * Common networks to display in UI selectors
+ * Helper function to get common networks for UI selectors
  */
-export const COMMON_NETWORKS = [
-    { id: 1, name: 'Ethereum Mainnet' },
-    { id: 5, name: 'Goerli Testnet' },
-    { id: 11155111, name: 'Sepolia Testnet' },
-    { id: 137, name: 'Polygon Mainnet' },
-    { id: 80001, name: 'Mumbai Testnet' },
-    { id: 31337, name: 'Hardhat Local' },
-    { id: 1337, name: 'Local Network' },
-];
+export function getCommonNetworks() {
+    return Object.values(NETWORK_CONFIG).filter(network => network.isCommon);
+}
