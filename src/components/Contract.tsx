@@ -4,6 +4,7 @@ import { AppleNavBar } from './AppleNavBar';
 import { UINetwork } from './Network';
 import { getContractAbiFromConfig } from '../../lib/utils';
 import { deployee } from '../../config/config.deploy';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 const navIcons = [
     {
@@ -31,7 +32,6 @@ const navIcons = [
 
 function AddContractBtn({ setContract }: { setContract: (contract: Contract) => void }) {
     const [loading, setLoading] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false);
 
     async function handleSelect(contractName: string) {
         setLoading(true);
@@ -42,28 +42,35 @@ function AddContractBtn({ setContract }: { setContract: (contract: Contract) => 
             console.error("Error loading contract:", error);
         } finally {
             setLoading(false);
-            setShowDropdown(false);
         }
     }
 
     return (
-        <div className='relative'>
-            <div className='p-2 border rounded-xl cursor-pointer hover:bg-gray-700'
-                onClick={() => setShowDropdown(!showDropdown)}>
-                {loading ? 'Loading...' : 'Add Contract'}
-            </div>
-            {showDropdown && (
-                <div className='absolute mt-4 w-full bg-gray-800 border rounded-xl'>
-                    {deployee.contractNames.map((contractName: string) => (
-                        <div key={contractName} className='p-2 cursor-pointer hover:bg-gray-700'
-                            onClick={() => handleSelect(contractName)}>
-                            {contractName}
-                        </div>
-                    ))}
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+                <div className='p-2 border rounded-xl cursor-pointer hover:bg-gray-700'>
+                    {loading ? 'Loading...' : 'Add Contract'}
                 </div>
-            )}
-        </div>
-    )
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                    className='min-w-[200px] bg-gray-800 mt-1 Fz-50'
+                    sideOffset={5}
+                >
+                    {deployee.contractNames.map((contractName: string) => (
+                        <DropdownMenu.Item
+                            key={contractName}
+                            className='px-2 py-4 cursor-pointer hover:bg-gray-700 outline-none text-white'
+                            onClick={() => handleSelect(contractName)}
+                        >
+                            {contractName}
+                        </DropdownMenu.Item>
+                    ))}
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+    );
 }
 
 export function UIContract({ contract, setContract }: { contract: Contract, setContract: (contract: Contract) => void }) {
