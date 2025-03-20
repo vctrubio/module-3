@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { getEthers } from './wallet';
+import { getEthers, switchNetwork } from './wallet';
 import MyAbi from './components/MyAbi';
 import { Client } from './client';
+// Import the useContract hook
+import { useContract } from './contract';
 
 const WalletShow = ({ walletInstance }) => {
     const [jsonError, setJsonError] = useState(false);
@@ -41,8 +43,9 @@ const WalletShow = ({ walletInstance }) => {
     );
 };
 
-const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isConnecting, contractInstance, setContractInstance }) => {
+const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isConnecting, contractInstance, setContractInstance, setWalletInstance }) => {
     const [networkMismatch, setNetworkMismatch] = useState(false);
+    const [isSwitchingNetwork, setIsSwitchingNetwork] = useState(false);
 
     useEffect(() => {
         if (walletInstance && contractInstance) {
@@ -57,6 +60,27 @@ const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isC
             }
         }
     }, [walletInstance, contractInstance]);
+
+    const handleNetworkSwitch = async () => {
+        if (!contractInstance || !contractInstance.network?.chainId) return;
+        
+        setIsSwitchingNetwork(true);
+        try {
+            const success = await switchNetwork(contractInstance.network.chainId);
+            if (success) {
+                // Refresh wallet data after successful switch
+                const instance = await getEthers();
+                // Assuming you have access to setWalletInstance
+                if (instance && instance.connected) {
+                    setWalletInstance(instance);
+                }
+            }
+        } catch (error) {
+            console.error("Error during network switch:", error);
+        } finally {
+            setIsSwitchingNetwork(false);
+        }
+    };
 
     if (walletInstance && walletInstance.connected) {
         return (
@@ -76,6 +100,13 @@ const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isC
                         <p>Your wallet is connected to network with chainId: {walletInstance.network?.chainId}</p>
                         <p>Contract is deployed on network with chainId: {contractInstance.network?.chainId}</p>
                         <p>Please switch your network to interact with this contract.</p>
+                        <button
+                            onClick={handleNetworkSwitch}
+                            disabled={isSwitchingNetwork}
+                            className={`mt-2 px-4 py-2 ${isSwitchingNetwork ? 'bg-gray-400' : 'bg-yellow-500 hover:bg-yellow-600'} text-white rounded transition duration-300`}
+                        >
+                            {isSwitchingNetwork ? 'Switching...' : 'Switch Network'}
+                        </button>
                     </div>
                 )}
 
@@ -115,41 +146,30 @@ const WalletConnection = ({ walletInstance, connectWallet, disconnectWallet, isC
 function App() {
     const [walletInstance, setWalletInstance] = useState(null);
     const [isConnecting, setIsConnecting] = useState(false);
-    const [contractInstance, setContractInstance] = useState(null);
+    const [contractAddress, setContractAddress] = useState(''); // New state for contract address
+    const [contractAbi, setContractAbi] = useState(null); // New state for contract ABI
 
-    const connectWallet = async () => {
-        try {
-            setIsConnecting(true);
-            console.log("Connecting to wallet...");
-            const instance = await getEthers();
-            console.log("Connected to wallet:", instance);
-            setWalletInstance(instance);
-        } catch (error) {
-            console.error("Error connecting to wallet:", error);
-            alert("Error connecting to wallet");
-        } finally {
-            setIsConnecting(false);
+    // Using our custom hook when we have an address, ABI and signer
+    const { contract, isLoading, error, call, initContract } = useContract(
+        contractAddress || '0x0000000000000000000000000000000000000000', // Default or empty address
+        contractAbi,
+        walletInstance?.signer // Use the signer from the wallet when available
+    );
+
+    useEffect(() => {
+        if (contract && !isLoading && !error) {
+            setContractInstance(contract);
         }
-    };
+    }, [contract, isLoading, error]);
 
-    const disconnectWallet = () => {
-        setWalletInstance(null);
-    };
 
     window.w = walletInstance;
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 w-full">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 p-4 w-full text-white">
             <h1 className={`text-4xl font-bold mb-8 ${!walletInstance && 'animate-bounce'}`}>
                 Hello Sir, lets begin
             </h1>
-            <WalletConnection
-                walletInstance={walletInstance}
-                connectWallet={connectWallet}
-                disconnectWallet={disconnectWallet}
-                isConnecting={isConnecting}
-                contractInstance={contractInstance}
-                setContractInstance={setContractInstance}
-            />
+
         </div>
     );
 }

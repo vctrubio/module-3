@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "deploy": "pnpm hardhat run hardhat/scripts/deploy.js",
+    "dep": "pnpm hardhat run hardhat/scripts/deploy.js",
+    "deploy": "pnpm hardhat run hardhat/scripts/deploy.js --network localhost",
     "dev": "vite"
   },
   "keywords": [],

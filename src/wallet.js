@@ -20,6 +20,73 @@ export const disconnectWallet = () => {
     return null;
 };
 
+/**
+ * Prompts the user to switch to the specified network
+ * @param {string} chainId - The chain ID to switch to (in hex or decimal)
+ * @returns {Promise<boolean>} - Returns true if switch was successful
+ */
+export const switchNetwork = async (chainId) => {
+    if (!window.ethereum) {
+        alert("MetaMask is not installed!");
+        return false;
+    }
+
+    // Convert decimal chainId to hex if it's not already in hex format
+    const chainIdHex = chainId.toString().startsWith('0x') 
+        ? chainId 
+        : `0x${parseInt(chainId).toString(16)}`;
+    
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: chainIdHex }],
+        });
+        return true;
+    } catch (error) {
+        // This error code indicates that the chain has not been added to MetaMask
+        if (error.code === 4902) {
+            try {
+                // Special handling for Ganache localhost network
+                if (chainId === '1337' || chainIdHex === '0x539') {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: '0x539', // 1337 in hex
+                                chainName: 'Ganache Localhost',
+                                nativeCurrency: {
+                                    name: 'ETH',
+                                    symbol: 'ETH',
+                                    decimals: 18
+                                },
+                                rpcUrls: ['http://localhost:8585'],
+                                blockExplorerUrls: []
+                            }
+                        ]
+                    });
+                    
+                    // Try switching again after adding the network
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: chainIdHex }],
+                    });
+                    return true;
+                } else {
+                    alert("This network is not available in your MetaMask, please add it manually.");
+                }
+            } catch (addError) {
+                console.error("Error adding the network:", addError);
+                alert("Failed to add the network. " + addError.message);
+                return false;
+            }
+        } else {
+            console.error("Error switching network:", error);
+            alert("Failed to switch network. " + error.message);
+        }
+        return false;
+    }
+};
+
 export async function getEthers() {
     try {
         console.log('one')
