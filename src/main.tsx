@@ -23,28 +23,6 @@ function App() {
         }
     };
 
-    const createContract = (contractData: {address: string, abi: string}) => {
-        if (!wallet || !wallet.network) return;
-        
-        try {
-            const parsedAbi = JSON.parse(contractData.abi);
-            const newContract: Contract = {
-                params: {
-                    address: contractData.address,
-                    abi: parsedAbi
-                },
-                instance: null, // You'd create the actual instance here with ethers
-                network: wallet.network,
-                apiResponse: {}
-            };
-            
-            setContract(newContract);
-        } catch (err) {
-            console.error("Error creating contract:", err);
-            // You might want to set an error state here
-        }
-    };
-
     useEffect(() => {
         fetchWallet();
     }, []);
@@ -98,11 +76,10 @@ function App() {
                     <button
                         className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
                         onClick={() => {
-                            // Add interaction logic here
                             console.log("Interacting with contract...");
                         }}
                     >
-                        Interact with Contract
+                        -- Interact with Contract --
                     </button>
                 </div>
             )}

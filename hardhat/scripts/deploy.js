@@ -1,15 +1,14 @@
 import hh from "hardhat";
 import fs from 'fs';
 import { deployee } from "../../config/config.deploy.js";
-import { COLORS } from "../../lib/macros.js";
+import { COLORS, configDir } from "../../lib/macros.js";
 
 async function writeResultToFile(result, contractName) {
-  const outputDir = './config'; //it is relative to where the pnpm is executed
-  const outputFile = `${outputDir}/config.${contractName}.json`;
+  const outputFile = `${configDir}/config.${contractName}.json`;
 
-  if (!fs.existsSync(outputDir)) {
-    console.error(`Directory ${outputDir} does not exist`);
-    throw new Error(`Directory ${outputDir} does not exist`);
+  if (!fs.existsSync(configDir)) {
+    console.error(`Directory ${configDir} does not exist`);
+    throw new Error(`Directory ${configDir} does not exist`);
   }
 
   fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
