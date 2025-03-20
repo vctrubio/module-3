@@ -30,16 +30,24 @@ const navIcons = [
     },
 ];
 
-function AddContractBtn({ setContract }: { setContract: (contract: Contract) => void }) {
+function AddContractBtn({ setContract }: {
+    setContract: (contract: Contract) => void,
+}) {
     const [loading, setLoading] = useState(false);
 
     async function handleSelect(contractName: string) {
         setLoading(true);
         try {
             const contractData = await getContractAbiFromConfig(contractName);
-            if (contractData) setContract(contractData);
+            if (contractData) setContract(contractData); // Success case, contractData is never null here, but why eslint then fuck
+            if (!contractData) console.log('what are u reading???')
         } catch (error) {
-            console.error("Error loading contract:", error);
+            setContract({
+                instance: null,
+                network: null,
+                params: { address: null, name: contractName, originalOwner: null, abi: null },
+                apiResponse: { getContractAbiFromConfigError: String(error) }
+            });
         } finally {
             setLoading(false);
         }

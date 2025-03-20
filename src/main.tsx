@@ -40,15 +40,17 @@ function App() {
     }, []);
 
     window.w = wallet;
+    window.c = contract;
+    
     return (
-        <div className="min-h-screen bg-gray-800 p-4 w-full text-white border">
+        <div className="min-h-screen bg-gray-800 p-4 w-full text-white">
             <h1 className="text-4xl font-bold text-center mb-8">
                 Hello Sir, lets begin
             </h1>
 
             <div className="flex justify-center gap-8">
                 
-                {/* {wallet ? (
+                {wallet ? (
                     <div className="flex flex-col lg:flex-row gap-6 items-start justify-center border">
                         <div className="w-full">
                             <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Wallet</h2>
@@ -64,7 +66,7 @@ function App() {
                             <div className="text-xl">Loading...</div>
                         )}
                     </div>
-                )} */}
+                )}
 
                 <div className="border">
                     <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Contract</h2>

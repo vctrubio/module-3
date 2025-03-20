@@ -19,7 +19,7 @@ export async function getContractAbiFromConfig(contractName: string): Promise<Co
                 instance: null,
                 network: jsonData.network || null,
                 params: {
-                    address: jsonData.contract.address || "0x",
+                    address: jsonData.contract.address || null,
                     name: jsonData.contract.name || null,
                     originalOwner: jsonData.contract.owner || null,
                     abi: jsonData.contract.abi || null
@@ -27,10 +27,9 @@ export async function getContractAbiFromConfig(contractName: string): Promise<Co
                 apiResponse: null
             };
         }
-        console.error('Invalid contract data format');
-        return null;
+
     } catch (error) {
-        console.error('Error reading contract config:', error);
-        return null;
+        throw error
     }
+
 }

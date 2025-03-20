@@ -33,7 +33,10 @@ export async function setNetwork(chainId: number) {
     }
 }
 
-export function UINetwork({ network, refreshWallet, disabled }: { network: Network, refreshWallet: () => void, disabled?: boolean  }) {
+export function UINetwork({ network, refreshWallet, disabled }: { network: Network | null, refreshWallet: () => void, disabled?: boolean  }) {
+    if (!network) return <>no network found</>;
+    if (!network.chainId) return <>no chainId found</>
+
     const [showNetworkDropdown, setShowNetworkDropdown] = useState(false);
     const networkInfo = getNetwork(network.chainId);
 
@@ -46,7 +49,7 @@ export function UINetwork({ network, refreshWallet, disabled }: { network: Netwo
     };
 
     return (
-        <div className="ml-4 relative">
+        <div className="relative">
             <button
                 className="bg-blue-700 hover:bg-gray-800 text-white py-2 px-4 rounded flex items-center"
                 onClick={() => setShowNetworkDropdown(!showNetworkDropdown)}

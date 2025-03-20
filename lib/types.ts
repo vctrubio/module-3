@@ -20,7 +20,7 @@ export interface Network {
 export interface Contract {
     params: {
         name: string | null;
-        address: string;
+        address: string | null;
         abi: ethers.ContractInterface | null;
         originalOwner: string | null;
     }
