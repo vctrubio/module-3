@@ -4,9 +4,9 @@ const NETWORK = {
   url: "http://127.0.0.1:8545",
 };
 
-const CONTRACT = "HouseUrban";
+const CONTRACTS = ["HouseUrban"];
 
 export const deployee = {
   network: NETWORK,
-  contractName: CONTRACT,
+  contractNames: CONTRACTS,
 };
