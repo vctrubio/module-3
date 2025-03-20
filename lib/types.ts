@@ -8,7 +8,7 @@ export interface Wallet {
     address: string | null;
     network: Network | null;
     balance: BalanceInfo | null;
-    apiResponse: Record<string, any>;
+    apiResponse: Record<string, any> | null;
 }
 
 export interface Network {
@@ -19,10 +19,23 @@ export interface Network {
 
 export interface Contract {
     params: {
+        name: string | null;
         address: string;
         abi: ethers.ContractInterface | null;
+        originalOwner: string | null;
     }
     instance: ethers.Contract | null;
-    network: Network;
-    apiResponse: Record<string, any>;
+    network: Network | null;
+    apiResponse: Record<string, any> | null;
 }
+
+
+/*
+Including rpcUrl is optional but useful if you want to:
+Display it to the user (e.g., for debugging).
+Switch providers manually later (e.g., fallback to a different RPC).
+Track which endpoint the wallet is using.
+
+
+
+*/

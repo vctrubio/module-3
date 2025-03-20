@@ -27,13 +27,40 @@ const navIcons = [
     },
 ];
 
-export function UIContract({ contract }: { contract: Contract }) {
+
+function AddContractBtn({ setContract }: { setContract: (contract: Contract) => void }) {
+    function handleClick() {
+        setContract({
+            instance: null,
+            network: null,
+            apiResponse: null,
+            params: {
+                address: "0x",
+                abi: null,
+                originalOwner: null,
+                name: null
+            }
+        })
+    }
+
+    return (
+        <div className='p-2 border rounded-xl'
+            onClick={handleClick}>
+            Add Contract
+        </div>
+    )
+}
+
+
+export function UIContract({ contract, setContract }: { contract: Contract, setContract: (contract: Contract) => void }) {
+
 
     return (
         <div className="bg-gray-900 p-4 rounded-lg shadow-lg w-full max-w-2xl overflow-auto">
             <div className="flex py-2 items-center justify-between">
                 <AppleNavBar icons={navIcons} />
-                {contract ? <UINetwork network={contract.network} refreshWallet={() => { }} disabled={true} /> : <>no network</>}
+                <AddContractBtn setContract={setContract} />
+                {/* {contract ? <UINetwork network={contract.network} refreshWallet={() => { }} disabled={true} /> : <AddContractBtn setContract={setContract} />} */}
             </div>
 
             <div>

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Wallet, Contract } from '../lib/types'
 import { getConnection } from './myethers';
 import { UIWallet } from './components/Wallet';
-import { UIContract } from './components/UIContract';
+import { UIContract } from './components/Contract';
 
 function App() {
     const [wallet, setWallet] = useState<Wallet | null>(null);
@@ -20,6 +20,28 @@ function App() {
         else {
             setError(result.apiResponse?.error || "Unknown error");
             console.error(result.status, result.apiResponse);
+        }
+    };
+
+    const createContract = (contractData: {address: string, abi: string}) => {
+        if (!wallet || !wallet.network) return;
+        
+        try {
+            const parsedAbi = JSON.parse(contractData.abi);
+            const newContract: Contract = {
+                params: {
+                    address: contractData.address,
+                    abi: parsedAbi
+                },
+                instance: null, // You'd create the actual instance here with ethers
+                network: wallet.network,
+                apiResponse: {}
+            };
+            
+            setContract(newContract);
+        } catch (err) {
+            console.error("Error creating contract:", err);
+            // You might want to set an error state here
         }
     };
 
@@ -67,9 +89,23 @@ function App() {
 
                 <div className="border">
                     <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Contract</h2>
-                    <UIContract contract={contract} />
+                    <UIContract contract={contract} setContract={setContract} />
                 </div>
             </div>
+            {wallet && contract && (
+                <div className="mt-8 text-center">
+                    <p className="text-xl mb-4">We have contract and wallet. Let's interact!</p>
+                    <button
+                        className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => {
+                            // Add interaction logic here
+                            console.log("Interacting with contract...");
+                        }}
+                    >
+                        Interact with Contract
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

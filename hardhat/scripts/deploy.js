@@ -28,20 +28,20 @@ async function main() {
     const contractFactory = await hh.ethers.getContractFactory(deployee.contractName, signer); // Use the signer
     const contractInstance = await contractFactory.deploy();
     await contractInstance.waitForDeployment();
-    
+
     const address = await contractInstance.getAddress();
     // Get the full ABI structure instead of using format('json')
     const artifact = await hh.artifacts.readArtifact(deployee.contractName);
     const abi = artifact.abi;
-    
+
     return {
       network: {
         name: deployee.network.name,
         chainId: deployee.network.chainId,
         url: deployee.network.url,
-        address: address,
       },
       contract: {
+        address: address,
         name: deployee.contractName,
         owner: signer.address,
         abi: abi,
