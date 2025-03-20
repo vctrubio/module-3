@@ -3,10 +3,32 @@
 import { Contract } from '../lib/types';
 import { COLORS, configDir } from "../lib/macros.js";
 
-export async function getContractAbiFromConfig(contractName: string){
+export async function getContractAbiFromConfig(contractName: string): Promise<Contract | null> {
     try {
-        console.log('ok contract data format');
-        return 1;
+        console.log('fetching contract from getContractAbiFromConfig> ', contractName);
+        const response = await fetch(`/config/config.${contractName}.json`);
+
+        if (!response.ok) {
+            throw new Error(`Failed to load contract: ${response.statusText}`);
+        }
+
+        const jsonData = await response.json();
+
+        if (jsonData && jsonData.contract) {
+            return {
+                instance: null,
+                network: jsonData.network || null,
+                params: {
+                    address: jsonData.contract.address || "0x",
+                    name: jsonData.contract.name || null,
+                    originalOwner: jsonData.contract.owner || null,
+                    abi: jsonData.contract.abi || null
+                },
+                apiResponse: null
+            };
+        }
+        console.error('Invalid contract data format');
+        return null;
     } catch (error) {
         console.error('Error reading contract config:', error);
         return null;

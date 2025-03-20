@@ -4,7 +4,7 @@ const NETWORK = {
   url: "http://127.0.0.1:8545",
 };
 
-const CONTRACTS = ["HouseUrban"];
+const CONTRACTS = ["HouseUrban", "houseonwheels"];
 
 export const deployee = {
   network: NETWORK,

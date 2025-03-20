@@ -3,6 +3,7 @@ import { Contract } from '../../lib/types';
 import { AppleNavBar } from './AppleNavBar';
 import { UINetwork } from './Network';
 import { getContractAbiFromConfig } from '../../lib/utils';
+import { deployee } from '../../config/config.deploy';
 
 const navIcons = [
     {
@@ -28,42 +29,49 @@ const navIcons = [
     },
 ];
 
-
 function AddContractBtn({ setContract }: { setContract: (contract: Contract) => void }) {
     const [loading, setLoading] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    async function handleClick() {
+    async function handleSelect(contractName: string) {
         setLoading(true);
         try {
-            const contractData = await getContractAbiFromConfig("HouseUrban");
-            if (contractData) {
-                console.log("Contract loaded successfully:", contractData);
-            }
+            const contractData = await getContractAbiFromConfig(contractName);
+            if (contractData) setContract(contractData);
         } catch (error) {
             console.error("Error loading contract:", error);
         } finally {
             setLoading(false);
+            setShowDropdown(false);
         }
     }
 
     return (
-        <div className='p-2 border rounded-xl cursor-pointer hover:bg-gray-700'
-            onClick={handleClick}>
-            {loading ? 'Loading...' : 'Add Contract'}
+        <div className='relative'>
+            <div className='p-2 border rounded-xl cursor-pointer hover:bg-gray-700'
+                onClick={() => setShowDropdown(!showDropdown)}>
+                {loading ? 'Loading...' : 'Add Contract'}
+            </div>
+            {showDropdown && (
+                <div className='absolute mt-4 w-full bg-gray-800 border rounded-xl'>
+                    {deployee.contractNames.map((contractName: string) => (
+                        <div key={contractName} className='p-2 cursor-pointer hover:bg-gray-700'
+                            onClick={() => handleSelect(contractName)}>
+                            {contractName}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
 
-
 export function UIContract({ contract, setContract }: { contract: Contract, setContract: (contract: Contract) => void }) {
-
-
     return (
         <div className="bg-gray-900 p-4 rounded-lg shadow-lg w-full max-w-2xl overflow-auto">
             <div className="flex py-2 items-center justify-between">
                 <AppleNavBar icons={navIcons} />
-                <AddContractBtn setContract={setContract} />
-                {/* {contract ? <UINetwork network={contract.network} refreshWallet={() => { }} disabled={true} /> : <AddContractBtn setContract={setContract} />} */}
+                {contract ? <UINetwork network={contract.network} refreshWallet={() => { }} disabled={true} /> : <AddContractBtn setContract={setContract} />}
             </div>
 
             <div>
