@@ -24,18 +24,18 @@ export async function getConnection() {
         console.log('Getting address...');
         const address = await signer.getAddress();
         console.log('Connected address:', address);
-        
+
         console.log('Getting network info...');
         const network = await provider.getNetwork();
         console.log('Detected network:', network);
-        
+
         console.log('Getting balance...');
         const balance = await provider.getBalance(address);
-        
-        
+
+
         return {
             address,
-            chainId: {
+            network: {
                 chainId: network.chainId.toString(),
                 name: network.name,
                 // rpcUrl: rpcUrl //dont know what this does yet
