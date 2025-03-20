@@ -1,5 +1,17 @@
 import { ethers } from 'ethers';
 
+
+
+
+
+
+
+
+
+
+
+
+///////////////old 
 export const connectWallet = async () => {
     if (window.ethereum) {
         try {

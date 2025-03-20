@@ -1,5 +1,5 @@
 import hh from "hardhat";
-import { deployee } from "../../src/config.deploy.js";
+import { deployee } from "../../config/config.deploy.js";
 import fs from 'fs';
 import { COLORS } from "../../lib/macros.js";
 

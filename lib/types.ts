@@ -7,28 +7,22 @@ export interface BalanceInfo {
 
 export interface Wallet {
     address: string | null;
-    chainId: string | null;
+    chainId: Network | null;
     balance: BalanceInfo | null;
     apiResponse: Record<string, any>;
-    blockNumber?: number;
-    blockHash?: string;
 }
 
-export interface User {
-    ipAddress: string;
-    loggedIn: boolean;
-    wallet: Wallet;
+
+export interface Network {
+    chainId: string;
+    name: string;
+    rpcUrl: string;
 }
+
 
 export interface Contract {
     address: string;
     abi: any;
     instance: any;
     apiResponse: Record<string, any>;
-}
-
-export interface Network {
-    chainId: string;
-    name: string;
-    rpcUrl: string;
 }
