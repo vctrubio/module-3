@@ -1,0 +1,8 @@
+.PHONY: dev deploy
+
+dev:
+	pnpm run dev
+
+deploy:
+	# Add your deployment commands here
+	echo "Deploying..."
