@@ -1,87 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Wallet, Contract } from '../lib/types'
-import { getConnection } from './myethers';
-import { UIWallet } from './components/Wallet';
-import { UIContract } from './components/Contract';
-import { ContractInteraction } from './components/ContractInteraction';
+import { Index } from './components/Index';
 
-function App() {
-    const [wallet, setWallet] = useState<Wallet | null>(null);
-    const [contract, setContract] = useState<Contract | null>(null);
-    const [error, setError] = useState<string | null>(null);
+// Add the necessary FontAwesome CSS for icons
+// You'd need to include this in your HTML or via import if using a package
+document.addEventListener('DOMContentLoaded', () => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+  document.head.appendChild(link);
+});
 
-    const fetchWallet = async () => {
-        const result = await getConnection();
-        if (result.status === 200) {
-            // Remove the status property before setting wallet
-            const { status, ...walletData } = result;
-            setWallet(walletData);
-        }
-        else {
-            setError(result.apiResponse?.error || "Unknown error");
-            console.error(result.status, result.apiResponse);
-        }
-    };
+// Add the fade-in animation to stylesheet
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-    useEffect(() => {
-        fetchWallet();
-    }, []);
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+`;
+document.head.appendChild(style);
 
-    useEffect(() => {
-        if (window.ethereum) {
-            const handleChainChanged = () => {
-                fetchWallet();
-            };
-            window.ethereum.on('chainChanged', handleChainChanged);
-            return () => {
-                window.ethereum.removeListener('chainChanged', handleChainChanged);
-            };
-        }
-    }, []);
-
-    window.w = wallet;
-    window.c = contract;
-
-    return (
-        <div className="min-h-screen bg-gray-800 p-4 w-full text-white">
-            <h1 className="text-4xl font-bold text-center mb-8">
-                Hello Sir, lets begin
-            </h1>
-
-            {wallet && contract && (
-                <ContractInteraction
-                    wallet={wallet}
-                    contract={contract}
-                />
-            )}
-
-            <div className="flex justify-center gap-8">
-                {wallet ? (
-                    <div className="flex flex-col lg:flex-row gap-6 items-start justify-center border">
-                        <div className="w-full">
-                            <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Wallet</h2>
-                            <UIWallet wallet={wallet} refreshWallet={fetchWallet} />
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex justify-center">
-                        {error ? (
-                            <div className="text-red-400">Error: {error}</div>
-                        ) : (
-                            <div className="text-xl">Loading...</div>
-                        )}
-                    </div>
-                )}
-
-                <div className="border">
-                    <h2 className="text-2xl font-semibold mb-4 text-center lg:text-left">Contract</h2>
-                    <UIContract contract={contract} setContract={setContract} />
-                </div>
-            </div>
-        </div>
-    );
+// Define global object types for development helpers
+declare global {
+  interface Window {
+    w: any;
+    c: any;
+  }
 }
 
 const root = ReactDOM.createRoot(document.getElementById('app'));
-root.render(<App />);
+root.render(<Index />);

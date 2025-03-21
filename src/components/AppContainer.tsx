@@ -6,6 +6,7 @@ import { TokenInfo } from './TokenInfo';
 import { Wallet } from '../../lib/types';
 import { ethers } from 'ethers';
 import { navigationItems } from './navigationConfig';
+import { NetworkSwitcher } from './NetworkSwitcher';
 
 // Placeholder for a Contract Explorer component
 const ContractExplorer = ({ contract, provider, address }: any) => (
@@ -51,6 +52,29 @@ export function AppContainer({ wallet, refreshWallet }: AppContainerProps) {
       abi: [/* sample ABI methods */],
       name: "Sample ERC-1155 Token"
     });
+  };
+
+  // Handle network switching
+  const handleNetworkSwitch = async (network: { name: string; chainId: string }) => {
+    try {
+      if (!window.ethereum) {
+        throw new Error("No Ethereum provider found");
+      }
+      
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${parseInt(network.chainId).toString(16)}` }],
+      });
+      
+      // The wallet refresh will happen via the chainChanged event listener
+    } catch (error: any) {
+      // If the network doesn't exist, we could add code here to add it
+      if (error.code === 4902) {
+        // Network not available, would need to add it
+        console.log("Network not available in wallet");
+      }
+      throw error;
+    }
   };
 
   // Render the active component
@@ -115,30 +139,36 @@ export function AppContainer({ wallet, refreshWallet }: AppContainerProps) {
         {renderActiveComponent()}
       </div>
       
-      {/* Footer with connection info */}
+      {/* Footer with connection info and network switcher */}
       <div className="bg-gray-900 border-t border-gray-800 mt-8">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center text-sm text-gray-400">
-          <div>
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center text-sm">
+          <div className="flex items-center space-x-4">
             {wallet?.network?.name && (
-              <span className="mr-4">
+              <span className="text-gray-400 flex items-center">
                 <span className="fas fa-network-wired mr-1"></span> 
                 {wallet.network.name} ({wallet.network.chainId})
               </span>
             )}
             {wallet?.address && (
-              <span>
+              <span className="text-gray-400">
                 <span className="fas fa-wallet mr-1"></span> 
                 {wallet.address.substring(0, 6)}...{wallet.address.substring(wallet.address.length - 4)}
               </span>
             )}
           </div>
-          <div>
+          <div className="flex items-center space-x-3">
+            <NetworkSwitcher 
+              currentNetwork={wallet?.network} 
+              onNetworkChange={handleNetworkSwitch}
+              disabled={!wallet?.address} 
+            />
             <button 
               onClick={refreshWallet}
-              className="text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-blue-400 hover:text-blue-300 transition-colors flex items-center"
               title="Refresh wallet data"
             >
-              <span className="fas fa-sync-alt mr-1"></span> Refresh
+              <span className="fas fa-sync-alt mr-1"></span> 
+              <span className="hidden sm:inline">Refresh</span>
             </button>
           </div>
         </div>
