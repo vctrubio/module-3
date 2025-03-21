@@ -3,16 +3,28 @@ import { Navbar } from './Navbar';
 import { Dashboard } from './Dashboard';
 import { UIWallet } from './Wallet';
 import { TokenInfo } from './TokenInfo';
+import { ContractSelector } from './ContractSelector';
 import { Wallet } from '../../lib/types';
 import { ethers } from 'ethers';
 import { navigationItems } from './navigationConfig';
 import { NetworkSwitcher } from './NetworkSwitcher';
+import { AbiComponent } from './AbiComponent';
 
-// Placeholder for a Contract Explorer component
+// Replace the ContractExplorer placeholder with our new component
 const ContractExplorer = ({ contract, provider, address }: any) => (
   <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
     <h2 className="text-xl text-white mb-4">Contract Explorer</h2>
-    <p className="text-gray-300">Contract functionality will be implemented here.</p>
+    {contract && contract.address && contract.abi ? (
+      <AbiComponent 
+        address={contract.address}
+        abi={contract.abi}
+        provider={provider}
+        contractName={contract.name}
+        networkName={provider?._network?.name}
+      />
+    ) : (
+      <p className="text-gray-300">No contract connected. Please select a contract first.</p>
+    )}
   </div>
 );
 
@@ -31,27 +43,46 @@ interface AppContainerProps {
 
 export function AppContainer({ wallet, refreshWallet }: AppContainerProps) {
   const [activeItemId, setActiveItemId] = useState('dashboard');
-  const [contract, setContract] = useState({
-    address: null as string | null,
-    abi: null as any[] | null,
-    name: null as string | null
+  const [contract, setContract] = useState<{
+    instance: ethers.Contract | null;
+    address: string | null;
+    abi: any[] | null;
+    name: string | null;
+    functions?: any[];
+    events?: any[];
+  }>({
+    instance: null,
+    address: null,
+    abi: null,
+    name: null
   });
 
-  // Mock functions for demonstration
-  const connectWallet = () => {
-    console.log("Connect wallet requested");
-    // This would normally trigger a wallet connection flow
-    // In this case it's just a UI demo since we're already passing in the wallet
+  // Function to handle contract creation from manual input
+  const handleContractCreated = (contractInfo: {
+    instance: ethers.Contract;
+    address: string;
+    name: string;
+    abi: any[];
+    functions?: any[];
+    events?: any[];
+  }) => {
+    setContract(contractInfo);
+    // After contract connection, redirect to the contract explorer
+    setActiveItemId('contract');
   };
-
-  const connectContract = () => {
-    console.log("Connect contract requested");
-    // Mock contract connection for demo purposes
-    setContract({
-      address: "0x1234567890123456789012345678901234567890",
-      abi: [/* sample ABI methods */],
-      name: "Sample ERC-1155 Token"
-    });
+  
+  // Function to handle contract selection from existing contracts
+  const handleExistingContract = (contractData: Contract) => {
+    if (contractData && contractData.params) {
+      setContract({
+        instance: contractData.instance,
+        address: contractData.params.address,
+        abi: contractData.params.abi,
+        name: contractData.params.name || "Unknown Contract",
+        // Add any other properties needed
+      });
+      setActiveItemId('contract');
+    }
   };
 
   // Handle network switching
@@ -86,12 +117,21 @@ export function AppContainer({ wallet, refreshWallet }: AppContainerProps) {
             wallet={wallet} 
             contract={contract}
             setActiveItem={setActiveItemId}
-            connectWallet={connectWallet}
-            connectContract={connectContract}
+            connectWallet={refreshWallet}
+            connectContract={() => setActiveItemId('selectContract')}
           />
         );
       case 'wallet':
         return <UIWallet wallet={wallet} refreshWallet={refreshWallet} />;
+      case 'selectContract':
+        return (
+          <ContractSelector 
+            provider={wallet.provider}
+            onContractCreated={handleContractCreated}
+            existingAddress={contract.address || ''}
+            setExistingContract={handleExistingContract}
+          />
+        );
       case 'token':
         return (
           <TokenInfo 
@@ -115,8 +155,8 @@ export function AppContainer({ wallet, refreshWallet }: AppContainerProps) {
           wallet={wallet} 
           contract={contract}
           setActiveItem={setActiveItemId}
-          connectWallet={connectWallet}
-          connectContract={connectContract}
+          connectWallet={refreshWallet}
+          connectContract={() => setActiveItemId('selectContract')}
         />;
     }
   };
@@ -162,6 +202,16 @@ export function AppContainer({ wallet, refreshWallet }: AppContainerProps) {
               onNetworkChange={handleNetworkSwitch}
               disabled={!wallet?.address} 
             />
+            {contract.address && (
+              <button
+                onClick={() => setActiveItemId('selectContract')}
+                className="text-purple-400 hover:text-purple-300 transition-colors flex items-center"
+                title="Change contract"
+              >
+                <span className="fas fa-file-contract mr-1"></span> 
+                <span className="hidden sm:inline">Change Contract</span>
+              </button>
+            )}
             <button 
               onClick={refreshWallet}
               className="text-blue-400 hover:text-blue-300 transition-colors flex items-center"

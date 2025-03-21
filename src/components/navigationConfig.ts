@@ -22,6 +22,13 @@ export const navigationItems: NavigationItem[] = [
     requiresWallet: true,
   },
   {
+    id: 'selectContract',
+    name: 'Select Contract',
+    description: 'Connect to a smart contract',
+    iconClass: 'fas fa-plug',
+    requiresWallet: true,
+  },
+  {
     id: 'token',
     name: 'Token Inspector',
     description: 'Inspect and interact with ERC-1155 tokens',

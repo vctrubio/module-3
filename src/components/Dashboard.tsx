@@ -142,6 +142,38 @@ export function Dashboard({
         </div>
       </div>
       
+      {/* Call to Action - Only show when both wallet and contract are connected */}
+      {isWalletConnected && isContractConnected && (
+        <div className="mb-10 bg-gradient-to-r from-blue-900 to-purple-900 p-6 rounded-lg border border-blue-600 shadow-lg transform hover:scale-[1.01] transition-transform">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-white">Ready to interact with your contract</h3>
+              <p className="text-blue-200">
+                Your wallet and contract are both connected. You can now explore contract functions and interact with the blockchain.
+              </p>
+            </div>
+            <button 
+              onClick={() => setActiveItem('contract')}
+              className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-md transition-all shadow-blue-500/20 shadow-lg hover:shadow-blue-500/40 flex items-center space-x-2 transform hover:translate-x-1"
+            >
+              <span>Explore Contract</span>
+              <span className="fas fa-arrow-right"></span>
+            </button>
+          </div>
+          
+          <div className="mt-4 grid grid-cols-2 gap-4">
+            <div className="bg-blue-800 bg-opacity-50 p-3 rounded-md border border-blue-700">
+              <div className="text-xs text-blue-300 mb-1">Contract Name</div>
+              <div className="text-sm font-medium">{contract.name}</div>
+            </div>
+            <div className="bg-blue-800 bg-opacity-50 p-3 rounded-md border border-blue-700">
+              <div className="text-xs text-blue-300 mb-1">Connected Wallet</div>
+              <div className="text-sm font-medium truncate">{wallet.address?.substring(0, 10)}...{wallet.address?.substring(wallet.address.length - 6)}</div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Available Components Section */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">Available Components</h2>
