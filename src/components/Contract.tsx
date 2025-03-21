@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Contract } from '../../lib/types';
 import { AppleNavBar } from './AppleNavBar';
 import { UINetwork } from './Network';
@@ -52,6 +52,12 @@ function AddContractBtn({ setContract }: {
             setLoading(false);
         }
     }
+    
+    useEffect(() => {
+        if (deployee.contractNames.length > 0) {
+            handleSelect(deployee.contractNames[0]);
+        }
+    }, []);
 
     return (
         <DropdownMenu.Root>

@@ -9,9 +9,12 @@ interface ContractInteractionProps {
 export const ContractInteraction: React.FC<ContractInteractionProps> = ({ wallet, contract }) => {
     const networksMatch = wallet.network?.chainId == contract.network?.chainId;
 
+    function onClick() {
+        console.log('babies were made yesterday');
+
+    }
     return (
-        <div className="mt-8 text-center p-4 border-2 rounded-lg">
-            <p className="text-xl mb-4">We have contract and wallet. Let's interact!</p>
+        <div className="m-8 text-center p-4 border-2 rounded-lg">
             {networksMatch ? (
                 <div className="text-green-500">
                     <p>✅ Networks match! You can interact with the contract.</p>
@@ -23,6 +26,14 @@ export const ContractInteraction: React.FC<ContractInteractionProps> = ({ wallet
                     <p>Contract is on: {contract.network?.chainId}</p>
                 </div>
             )}
+            <div>
+                <button 
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                    onClick={onClick}
+                >
+                    Interact with Contract
+                </button>
+            </div>
         </div>
     );
 };
